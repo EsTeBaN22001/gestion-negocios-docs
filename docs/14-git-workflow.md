@@ -14,13 +14,13 @@ frontend
 Cada repositorio tendrá:
 
 ```text
-main
+master
 develop
 ```
 
-### main
+### master
 
-Representa una versión estable/producción.
+Representa una versión estable/producción. Corresponde a la rama por defecto configurada en el repositorio remoto (`origin`).
 
 ### develop
 
@@ -82,7 +82,7 @@ Si se utilizan PRs:
 
 ```text
 feature → develop
-develop → main
+develop → master
 ```
 
 ## No hacer
@@ -90,5 +90,5 @@ develop → main
 - No subir secrets.
 - No subir passwords.
 - No subir `.env` con credenciales reales.
-- No hacer force push sobre `main` sin autorización.
+- No hacer force push sobre `master` sin autorización.
 - No reescribir historial compartido sin autorización.

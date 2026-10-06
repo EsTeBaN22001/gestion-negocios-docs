@@ -46,7 +46,7 @@ Y deben poder ejecutarse:
 - Docker Compose.
 - Dos repositorios GitHub: backend y frontend.
 - Rama de trabajo: `develop`.
-- Rama estable: `main`.
+- Rama estable: `master`.
 
 ## Tareas de Fase 0
 
@@ -140,7 +140,7 @@ Como mínimo:
 
 ### P0-09 — Git y documentación
 
-Crear `develop` y `main` en ambos repositorios.
+Configurar `develop` y `master` en ambos repositorios.
 
 Realizar commits pequeños y descriptivos.
 

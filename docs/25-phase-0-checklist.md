@@ -14,7 +14,7 @@ Este checklist es obligatorio antes de comenzar la primera funcionalidad de nego
 
 - [x] Backend tiene repositorio Git independiente.
 - [x] Frontend tiene repositorio Git independiente.
-- [x] Existe `main`.
+- [x] Existe `master`.
 - [x] Existe `develop`.
 - [x] El trabajo actual se realiza en `develop`.
 - [x] `.gitignore` evita secretos, builds y dependencias.

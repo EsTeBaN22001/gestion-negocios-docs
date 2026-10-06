@@ -60,7 +60,7 @@ Implementación:
   - Componente inicial HomeComponent con verificación de estado de API y MySQL vía ApiService.
   - Entornos Angular (environment.ts / environment.prod.ts) y rutas base configuradas.
   - Docker Compose orquestando backend, frontend (Nginx multi-stage) y MySQL 8.0 con healthcheck y volumen persistente.
-  - Repositorios Git independientes en backend y frontend con ramas 'main' y 'develop', y commits iniciales limpios.
+  - Repositorios Git independientes en backend y frontend con ramas 'master' (estable) y 'develop' (activa), y commits iniciales limpios.
 Verificación:
   - Compilación de backend: dotnet build exitoso con 0 errores y 0 advertencias.
   - Migración EF Core: dotnet dotnet-ef migrations add InitialCreate completada exitosamente.

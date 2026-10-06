@@ -115,13 +115,13 @@ La Fase 0 de infraestructura está especificada en `docs/24-phase-0.md` y su che
 Ramas principales:
 
 ```text
-main
+master
 develop
 ```
 
 El desarrollo se realiza en `develop`.
 
-`main` representa una versión estable/producción.
+`master` representa una versión estable/producción.
 
 Convención de commits:
 
