@@ -1,2 +1,19 @@
+# Submodulos / repos independientes (ignorados del workspace root)
 backend/
 frontend/
+
+# Secretos locales — nunca versionar
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Datos locales de MySQL (si se usa sin Docker volumen)
+mysql-data/

@@ -12,16 +12,16 @@ Los agentes pueden actualizarlo después de completar trabajo verificable.
 - [x] Reglas principales definidas
 - [x] Stack definido
 - [x] Arquitectura general definida
-- [ ] Crear repositorio backend
-- [ ] Completar Fase 0 y checklist de infraestructura
-- [ ] Crear repositorio frontend
-- [ ] Crear solución ASP.NET Core
-- [ ] Configurar EF Core
-- [ ] Configurar MySQL
-- [ ] Crear migración inicial
-- [ ] Crear Docker Compose
-- [ ] Crear proyecto Angular
-- [ ] Configurar Bootstrap
+- [x] Crear repositorio backend
+- [x] Crear repositorio frontend
+- [x] Crear solución ASP.NET Core
+- [x] Configurar EF Core
+- [x] Configurar MySQL
+- [x] Crear migración inicial
+- [x] Crear Docker Compose
+- [x] Crear proyecto Angular
+- [x] Configurar Bootstrap
+- [x] Completar Fase 0 y checklist de infraestructura
 - [ ] Implementar autenticación
 - [ ] Implementar usuarios
 - [ ] Implementar sucursales
@@ -33,7 +33,7 @@ Los agentes pueden actualizarlo después de completar trabajo verificable.
 - [ ] Implementar archivos
 - [ ] Implementar paginación
 - [ ] Implementar búsquedas
-- [ ] Implementar Swagger
+- [x] Implementar Swagger (base de infraestructura)
 - [ ] Pruebas funcionales
 - [ ] Revisión académica
 - [ ] Preparar entrega
@@ -44,18 +44,31 @@ No marcar una tarea como terminada solo porque el código fue escrito.
 
 Debe estar implementada y verificada.
 
-## Formato de actualización
-
-Cuando un agente complete una tarea, puede agregar:
+## Registro de actualizaciones
 
 ```text
-Fecha:
-Tarea:
+Fecha: 2026-10-06
+Tarea: Fase 0 — Infraestructura y arranque (P0-01 a P0-09)
 Implementación:
+  - Backend ASP.NET Core 8 Web API estructurado con Data, Models, Controllers, appsettings por ambiente.
+  - Pomelo MySQL 8.0 y EF Core 8 configurados con retry policy.
+  - Entidades base creadas según docs/05-database.md (Usuario, Sucursal, Categoria, Producto, Stock, Venta, DetalleVenta) con Fluent API en ApplicationDbContext.
+  - Migración inicial "InitialCreate" generada exitosamente con dotnet-ef.
+  - Migración automática en startup y endpoint de verificación técnica /api/health y /api/health/db.
+  - Swagger/OpenAPI habilitado en Development.
+  - Frontend Angular 18 (Standalone Components) creado con Bootstrap 5 y Bootstrap Icons.
+  - Componente inicial HomeComponent con verificación de estado de API y MySQL vía ApiService.
+  - Entornos Angular (environment.ts / environment.prod.ts) y rutas base configuradas.
+  - Docker Compose orquestando backend, frontend (Nginx multi-stage) y MySQL 8.0 con healthcheck y volumen persistente.
+  - Repositorios Git independientes en backend y frontend con ramas 'main' y 'develop', y commits iniciales limpios.
 Verificación:
-Pendientes:
+  - Compilación de backend: dotnet build exitoso con 0 errores y 0 advertencias.
+  - Migración EF Core: dotnet dotnet-ef migrations add InitialCreate completada exitosamente.
+  - Compilación de frontend: npm run build de Angular completado con éxito (dist/gestion-negocios/browser).
+Pendientes para Fase 1:
+  - Autenticación JWT y módulo de usuarios (P1).
 ```
 
 ## Decisiones pendientes
 
-Registrar aquí únicamente decisiones reales que aún no hayan sido resueltas en la documentación principal.
+Ninguna para infraestructura base. Todas las decisiones arquitectónicas de Fase 0 están alineadas con la documentación.

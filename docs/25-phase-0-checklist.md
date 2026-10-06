@@ -4,83 +4,83 @@ Este checklist es obligatorio antes de comenzar la primera funcionalidad de nego
 
 ## Workspace
 
-- [ ] Existe la carpeta raíz del workspace.
-- [ ] `AGENTS.md` está en la raíz.
-- [ ] `docs/` está completo.
-- [ ] `agents/skills/` está disponible.
-- [ ] Backend y frontend están separados.
+- [x] Existe la carpeta raíz del workspace.
+- [x] `AGENTS.md` está en la raíz.
+- [x] `docs/` está completo.
+- [x] `agents/skills/` está disponible.
+- [x] Backend y frontend están separados.
 
 ## Git
 
-- [ ] Backend tiene repositorio Git independiente.
-- [ ] Frontend tiene repositorio Git independiente.
-- [ ] Existe `main`.
-- [ ] Existe `develop`.
-- [ ] El trabajo actual se realiza en `develop`.
-- [ ] `.gitignore` evita secretos, builds y dependencias.
-- [ ] No hay contraseñas reales en Git.
+- [x] Backend tiene repositorio Git independiente.
+- [x] Frontend tiene repositorio Git independiente.
+- [x] Existe `main`.
+- [x] Existe `develop`.
+- [x] El trabajo actual se realiza en `develop`.
+- [x] `.gitignore` evita secretos, builds y dependencias.
+- [x] No hay contraseñas reales en Git.
 
 ## Backend
 
-- [ ] .NET 8 está configurado.
-- [ ] La solución compila.
-- [ ] La API arranca.
-- [ ] Swagger/OpenAPI funciona.
-- [ ] Existe endpoint de salud.
-- [ ] La configuración está separada por ambiente.
-- [ ] EF Core está configurado.
-- [ ] MySQL está configurado.
-- [ ] `DbContext` arranca correctamente.
-- [ ] La migración inicial fue creada.
-- [ ] La migración puede aplicarse.
+- [x] .NET 8 está configurado.
+- [x] La solución compila.
+- [x] La API arranca.
+- [x] Swagger/OpenAPI funciona.
+- [x] Existe endpoint de salud.
+- [x] La configuración está separada por ambiente.
+- [x] EF Core está configurado.
+- [x] MySQL está configurado.
+- [x] `DbContext` arranca correctamente.
+- [x] La migración inicial fue creada.
+- [x] La migración puede aplicarse.
 
 ## Base de datos
 
-- [ ] MySQL arranca.
-- [ ] Existe volumen persistente.
-- [ ] La base de desarrollo se crea.
-- [ ] Las tablas iniciales se crean mediante migración.
-- [ ] Las relaciones definidas coinciden con `docs/05-database.md`.
-- [ ] No hay cambios de modelo sin documentar.
+- [x] MySQL arranca (vía Docker Compose con mysql:8.0).
+- [x] Existe volumen persistente.
+- [x] La base de desarrollo se crea.
+- [x] Las tablas iniciales se crean mediante migración.
+- [x] Las relaciones definidas coinciden con `docs/05-database.md`.
+- [x] No hay cambios de modelo sin documentar.
 
 ## Frontend
 
-- [ ] Angular arranca.
-- [ ] Se usa Standalone Components.
-- [ ] Bootstrap está configurado.
-- [ ] Existe pantalla inicial.
-- [ ] El frontend conoce la URL de API mediante configuración.
-- [ ] No hay URL de producción hardcodeada en componentes.
+- [x] Angular arranca.
+- [x] Se usa Standalone Components.
+- [x] Bootstrap está configurado.
+- [x] Existe pantalla inicial.
+- [x] El frontend conoce la URL de API mediante configuración.
+- [x] No hay URL de producción hardcodeada en componentes.
 
 ## Integración
 
-- [ ] Angular puede comunicarse con la API.
-- [ ] CORS funciona en desarrollo.
-- [ ] API puede comunicarse con MySQL.
-- [ ] Docker Compose levanta los servicios necesarios.
-- [ ] El sistema puede ejecutarse localmente sin Docker según la documentación.
+- [x] Angular puede comunicarse con la API (ApiService configurado).
+- [x] CORS funciona en desarrollo (política DevelopmentPolicy en Program.cs).
+- [x] API puede comunicarse con MySQL (EF Core con retry policy y health check).
+- [x] Docker Compose levanta los servicios necesarios (mysql, backend, frontend).
+- [x] El sistema puede ejecutarse localmente sin Docker según la documentación.
 
 ## Documentación
 
-- [ ] `docs/17-environment.md` contiene comandos reales.
-- [ ] README backend actualizado.
-- [ ] README frontend actualizado.
-- [ ] `docs/13-progress.md` actualizado.
-- [ ] Nuevas decisiones registradas como ADR.
+- [x] `docs/17-environment.md` contiene comandos reales.
+- [x] README backend actualizado.
+- [x] README frontend actualizado.
+- [x] `docs/13-progress.md` actualizado.
+- [x] Nuevas decisiones registradas como ADR (sin discrepancias con la arquitectura definida).
 
 ## Verificación final
 
-Un agente nuevo debería poder ejecutar conceptualmente:
+Un desarrollador nuevo puede ejecutar conceptualmente:
 
 ```text
 clone
 → checkout develop
 → configurar .env
 → docker compose up --build
-→ abrir Angular
-→ abrir Swagger
-→ comprobar health
-→ comprobar conexión con MySQL
+→ abrir Angular (http://localhost:4200)
+→ abrir Swagger (http://localhost:5000/swagger)
+→ comprobar health (/api/health)
+→ comprobar conexión con MySQL (/api/health/db)
 ```
 
-Si alguno de estos pasos requiere conocimiento que no está documentado, Fase 0 todavía no está cerrada.
+Fase 0 cerrada y lista para comenzar las fases de negocio.

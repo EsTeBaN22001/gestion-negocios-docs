@@ -2,66 +2,97 @@
 
 ## Objetivo
 
-Docker debe utilizarse desde el inicio, pero el proyecto debe seguir pudiendo ejecutarse localmente.
+Docker se utiliza para orquestar la infraestructura, garantizando reproducibilidad, y el proyecto también puede ejecutarse de manera local nativa.
 
-## Servicios
+## Servicios en Docker Compose
 
-Conceptualmente:
+| Servicio   | Contenedor                  | Puerto Host | Puerto Contenedor | Descripción                       |
+|------------|-----------------------------|-------------|-------------------|-----------------------------------|
+| `mysql`    | `gestion-negocios-mysql`    | 3306        | 3306              | Base de datos MySQL 8.0           |
+| `backend`  | `gestion-negocios-backend`  | 5000        | 8080              | ASP.NET Core 8 Web API            |
+| `frontend` | `gestion-negocios-frontend` | 4200        | 80                | Angular 18 servido por Nginx      |
 
-```text
-frontend
-backend
-mysql
+## Persistencia
+
+- MySQL utiliza un volumen nombrado `mysql_data` persistido en el host.
+- Incluye healthcheck con `mysqladmin ping` para asegurar que el backend inicie cuando MySQL esté listo.
+
+## Variables de Entorno (`.env`)
+
+Copia `.env.example` a `.env` en la raíz del workspace antes de iniciar:
+
+```bash
+cp .env.example .env
 ```
 
-## Docker Compose
+Variables disponibles:
+- `MYSQL_DATABASE`: Nombre de la base de datos (por defecto: `gestion_negocios`)
+- `MYSQL_USER`: Usuario de la base de datos (por defecto: `appuser`)
+- `MYSQL_PASSWORD`: Contraseña del usuario
+- `MYSQL_ROOT_PASSWORD`: Contraseña de root
+- `ASPNETCORE_ENVIRONMENT`: Ambiente de ASP.NET Core (`Development` o `Production`)
 
-El `docker-compose.yml` debe permitir levantar el entorno completo.
+## Comandos con Docker Compose
 
-## MySQL
+1. **Iniciar todo el entorno:**
+   ```bash
+   docker compose up --build
+   ```
 
-MySQL debe utilizar un volumen persistente.
+2. **Iniciar en segundo plano:**
+   ```bash
+   docker compose up -d
+   ```
 
-No depender de que los datos sobrevivan sin volumen.
+3. **Ver logs:**
+   ```bash
+   docker compose logs -f
+   ```
 
-## Backend
+4. **Detener servicios:**
+   ```bash
+   docker compose down
+   ```
 
-El backend debe recibir configuración mediante variables de entorno/configuración.
+5. **Detener y eliminar volúmenes (reset de datos):**
+   ```bash
+   docker compose down -v
+   ```
 
-La cadena de conexión no debe contener secretos reales en el repositorio.
+## Ejecución Local sin Docker
 
-## Frontend
-
-El frontend debe poder conocer la URL de API mediante configuración de entorno apropiada.
-
-No hardcodear URLs de producción dentro de componentes.
-
-## Ejecución local sin Docker
-
-Debe ser posible:
-
-```text
-MySQL local
-+
-dotnet run
-+
-ng serve
+### 1. Iniciar MySQL
+Asegúrate de tener un servicio MySQL local activo en el puerto 3306 (por ejemplo vía Laragon, XAMPP o Docker solo para la BD):
+```bash
+docker compose up -d mysql
 ```
 
-## Desarrollo
+### 2. Ejecutar Backend
+```bash
+cd backend
+dotnet run --project src/GestionNegocios.Api
+```
+- Swagger UI disponible en: [http://localhost:5000/swagger](http://localhost:5000/swagger)
+- Endpoint de verificación: [http://localhost:5000/api/health](http://localhost:5000/api/health)
+- Endpoint de conexión a BD: [http://localhost:5000/api/health/db](http://localhost:5000/api/health/db)
 
-La documentación definitiva debe registrar:
+### 3. Ejecutar Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+- Aplicación Angular disponible en: [http://localhost:4200](http://localhost:4200)
 
-- puertos;
-- nombres de servicios;
-- variables necesarias;
-- comandos;
-- credenciales de desarrollo.
+## Migraciones de Base de Datos
 
-No registrar secretos reales.
+Las migraciones de EF Core se aplican automáticamente al arrancar la API si la base de datos está disponible. Para administrarlas manualmente desde la terminal:
 
-## Producción
+```bash
+cd backend
+# Crear una nueva migración
+dotnet dotnet-ef migrations add <NombreMigracion> --project src/GestionNegocios.Api
 
-`main` representa la versión estable.
-
-La configuración de producción debe estar separada de la configuración local.
+# Aplicar migraciones a la BD
+dotnet dotnet-ef database update --project src/GestionNegocios.Api
+```
