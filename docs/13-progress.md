@@ -22,7 +22,7 @@ Los agentes pueden actualizarlo después de completar trabajo verificable.
 - [x] Crear proyecto Angular
 - [x] Configurar Bootstrap
 - [x] Completar Fase 0 y checklist de infraestructura
-- [ ] Implementar autenticación
+- [x] Implementar autenticación
 - [ ] Implementar usuarios
 - [ ] Implementar sucursales
 - [ ] Implementar categorías
@@ -103,6 +103,52 @@ Pendientes para Fase 2:
   - Autenticación JWT, registro/login y módulo de gestión de usuarios.
 ```
 
+```text
+Fecha: 2026-10-13
+Tarea: Fase 2 — Autenticación y autorización completa
+Implementación:
+  - Backend ASP.NET Core:
+      * Integración de Microsoft.AspNetCore.Authentication.JwtBearer con validación de clave simétrica HMAC-SHA256, Issuer, Audience, Lifetime y ClockSkew nulo.
+      * PasswordHasher<Usuario> registrado en DI para hash y verificación segura de contraseñas.
+      * AuthService implementado con Controller -> Service -> DbContext y DTOs con mapeo manual (LoginRequestDto, LoginResponseDto, UserDto).
+      * Claims estándar: NameIdentifier (ID), Email, Name, Role, Jti, y claim condicional "sucursalId" para Empleados.
+      * AuthController implementado con endpoints:
+          - POST /api/auth/login: login público, validación ModelState, respuesta 401 genérica sin revelar si falló email o password.
+          - GET /api/auth/me: protegido con [Authorize], devuelve UserDto sin exponer PasswordHash.
+          - GET /api/auth/admin-check: restringido con [Authorize(Roles = "Administrador")].
+      * Swagger/OpenAPI configurado con soporte para JWT Bearer Authentication (SecurityDefinition y SecurityRequirement).
+      * DataSeeder seguro: genera sucursal y usuarios iniciales de desarrollo (Administrador sin sucursal y Empleado con sucursal) utilizando PasswordHasher con credenciales configurables vía appsettings y variables de entorno.
+      * Suite automatizada de pruebas backend en tests/GestionNegocios.Api.Tests con 15 pruebas unitarias y de validación JWT (xUnit + InMemory EF Core).
+  - Frontend Angular:
+      * Core Models: interfaces User, LoginRequest, LoginResponse.
+      * AuthService: gestión reactiva con BehaviorSubject (currentUser$), persistencia segura en localStorage, verificación de expiración de token y método logout().
+      * Interceptor HTTP (authInterceptor): adjunta Bearer token a solicitudes contra la API y captura errores 401 para cerrar sesión de forma automática.
+      * Guards de navegación: authGuard para rutas privadas y roleGuard para verificación de roles en Angular.
+      * Componente de Login (LoginComponent): formulario reactivo con validaciones, mensajes comprensibles en Bootstrap, spinner de carga y prevención de re-envío.
+      * Panel de verificación en HomeComponent y barra de navegación en AppComponent que refleja el estado de sesión (datos, rol, sucursal, logout).
+      * Suite automatizada de pruebas frontend con Karma y ChromeHeadless (16 pruebas aprobadas).
+Verificación:
+  - Backend Build: dotnet build con 0 errores y 0 advertencias.
+  - Backend Tests: 15/15 pruebas unitarias y de validación JWT aprobadas (dotnet test).
+  - Frontend Build: ng build completado exitosamente.
+  - Frontend Tests: 16/16 pruebas unitarias de Karma/ChromeHeadless aprobadas.
+  - Verificación API en vivo contra MySQL (gestion_negocios_dev):
+      * Login con Administrador exitoso (200 OK con token y UserDto sin PasswordHash).
+      * Login con Empleado exitoso (200 OK con claim sucursalId).
+      * Login con contraseña incorrecta rechazado (401 Unauthorized con ProblemDetails genérico).
+      * Login con usuario inexistente rechazado (401 Unauthorized con ProblemDetails genérico).
+      * Login con usuario inactivo rechazado (401 Unauthorized con ProblemDetails genérico).
+      * Endpoint protegido sin token rechazado (401 Unauthorized).
+      * Endpoint protegido con token válido aprobado (200 OK con UserDto).
+      * Token alterado / firma inválida rechazado (401 Unauthorized).
+      * Token vencido rechazado tanto por middleware en vivo como por prueba de validación (401 Unauthorized).
+      * Restricción por rol comprobada: Administrador accede a /api/auth/admin-check (200 OK) y Empleado es rechazado (403 Forbidden).
+  - Docker Compose: docker compose build de imágenes backend y frontend completado exitosamente.
+Pendientes para Fase 3:
+  - Módulos de gestión (CRUD): Usuarios, Sucursales y Categorías.
+```
+
 ## Decisiones pendientes
 
-Ninguna. Todas las decisiones arquitectónicas de Fase 1 están alineadas con docs/05-database.md.
+Ninguna. La implementación de Fase 2 cumple estrictamente con docs/08-authentication.md, docs/06-api.md, docs/02-business-rules.md y ADR-003.
+

@@ -12,36 +12,86 @@ Base conceptual:
 
 La ruta exacta puede organizarse por Controller.
 
-## Autenticación
+## Autenticación y Autorización
+
+### Iniciar sesión
 
 ```http
 POST /api/auth/login
 ```
 
-Entrada conceptual:
+Entrada (`LoginRequestDto`):
 
 ```json
 {
   "email": "usuario@example.com",
-  "password": "..."
+  "password": "Password123*"
 }
 ```
 
-Respuesta exitosa:
+Respuesta exitosa (`200 OK`, `LoginResponseDto`):
 
 ```json
 {
   "token": "...",
-  "expiresAt": "...",
+  "expiresAt": "2026-10-13T23:00:00Z",
   "user": {
     "id": 1,
-    "nombre": "...",
-    "apellido": "...",
+    "nombre": "Juan",
+    "apellido": "Pérez",
+    "email": "usuario@example.com",
     "rol": "Empleado",
-    "sucursalId": 1
+    "sucursalId": 1,
+    "avatar": null
   }
 }
 ```
+
+Respuesta credenciales inválidas (`401 Unauthorized`):
+
+```json
+{
+  "title": "Credenciales incorrectas",
+  "status": 401,
+  "detail": "El email o la contraseña son incorrectos o la cuenta se encuentra desactivada."
+}
+```
+
+### Perfil de usuario autenticado
+
+```http
+GET /api/auth/me
+```
+
+Requiere encabezado: `Authorization: Bearer <token>`
+
+Respuesta exitosa (`200 OK`, `UserDto`):
+
+```json
+{
+  "id": 1,
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "usuario@example.com",
+  "rol": "Empleado",
+  "sucursalId": 1,
+  "avatar": null
+}
+```
+
+### Verificación de rol administrativo
+
+```http
+GET /api/auth/admin-check
+```
+
+Requiere encabezado: `Authorization: Bearer <token>`
+Restricción: `[Authorize(Roles = "Administrador")]`
+
+- `200 OK`: Autorizado como Administrador.
+- `403 Forbidden`: Usuario autenticado pero sin rol Administrador.
+- `401 Unauthorized`: Token ausente, inválido o expirado.
+
 
 ## Productos
 
